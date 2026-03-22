@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraBloom - Where Nature Meets Beauty</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Playfair Display (Serif Headings) & Poppins (Sans-Serif Body) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Define custom Tailwind colors and fonts */
+        :root {
+            --color-green: #4CAF50;
+            /* Earthy Forest Green */
+            --color-beige: #F5F5DC;
+            /* Soft Beige */
+            --color-pink: #F08080;
+            /* Blush Pink */
+        }
+
+        .bg-cream {
+            background-color: var(--color-beige);
+        }
+
+        .text-green {
+            color: var(--color-green);
+        }
+
+        .bg-green {
+            background-color: var(--color-green);
+        }
+
+        .text-pink {
+            color: var(--color-pink);
+        }
+
+        .bg-pink {
+            background-color: var(--color-pink);
+        }
+
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* General styling adjustments */
+        body {
+            background-color: var(--color-beige);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            /* Dark gray text */
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar style for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d0d0d0;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-pink);
+        }
+
+        /* Utility class for button hover - Green to Pink */
+        .btn-primary {
+            @apply bg-green text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-md;
+        }
+
+        .btn-primary:hover {
+            @apply bg-pink shadow-lg transform scale-[1.02];
+        }
+
+        /* Custom Card shadow and transition for luxury feel */
+        .product-card {
+            @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden;
+        }
+
+        /* Subtle Fade-in Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-cream">
+
+    <!-- Navbar Container (Fixed Top) -->
+    <header id="navbar-container" class="sticky top-0 z-50 shadow-md bg-cream/95 backdrop-blur-sm"></header>
+
+    <!-- Main Content Area -->
+    <main id="app-content" class="min-h-screen pt-20 px-4 md:px-8 lg:px-12"></main>
+
+    <!-- Footer Container -->
+    <footer id="footer-container" class="bg-green text-white mt-16 p-8 md:p-12 font-poppins"></footer>
+
+    <script>
+        // --- 1. MOCK DATA & STATE MANAGEMENT ---
+
+        // Using a thematic placeholder URL to represent the TerraBloom logo (logo (4).jpg)
+        const IMAGE_LOGO = "images/TerraBloom.png";
+
+        // Define Color Constants for JS logic
+        const COLORS = {
+            green: '#4CAF50',
+            beige: '#F5F5DC',
+            pink: '#F08080'
+        };
+
+        // --- REALISTIC PRODUCT DATA IN INR (50 Products) ---
+        const MOCK_PRODUCTS = [
+            // --- MAKEUP (10 Products) ---
+            { id: 1, name: "Fit Me Matte + Poreless Foundation", brand: "Maybelline", category: "Makeup", price: 699, rating: 4.5, availability: true, description: "A lightweight foundation that mattifies and refines pores, leaving a natural, seamless finish.", image: "https://placehold.co/400x400/F08080/FFFFFF?text=Maybelline+Fit+Me", alt: "Maybelline Fit Me Foundation bottle" },
+            { id: 2, name: "Ruby Woo Matte Lipstick", brand: "MAC", category: "Makeup", price: 1750, rating: 5.0, availability: true, description: "Iconic blue-red shade with a long-lasting, non-drying retro matte finish.", image: "https://placehold.co/400x400/900C3F/FFFFFF?text=MAC+Ruby+Woo", alt: "MAC Ruby Woo lipstick tube" },
+            { id: 3, name: "FauxFilter Luminous Matte Liquid Concealer", brand: "Huda Beauty", category: "Makeup", price: 2450, rating: 4.8, availability: true, description: "Full coverage, flexible concealer that moves with your skin, lasting up to 14 hours.", image: "https://placehold.co/400x400/FF0000/FFFFFF?text=Huda+FauxFilter", alt: "Huda Beauty FauxFilter Concealer" },
+            { id: 4, name: "Soft Pinch Liquid Blush (Joy)", brand: "Rare Beauty", category: "Makeup", price: 2900, rating: 4.9, availability: true, description: "Airy, lightweight liquid formula that blends easily for a soft, healthy flush.", image: "https://placehold.co/400x400/FFC0CB/000000?text=Rare+Beauty+Blush", alt: "Rare Beauty Soft Pinch Liquid Blush in Joy" },
+            { id: 5, name: "Gloss Bomb Universal Lip Luminizer", brand: "Fenty Beauty", category: "Makeup", price: 1950, rating: 4.7, availability: true, description: "The ultimate must-have lip gloss for an explosive shine that feels as good as it looks.", image: "https://placehold.co/400x400/4B0082/FFFFFF?text=Fenty+Gloss+Bomb", alt: "Fenty Beauty Gloss Bomb Lip Luminizer" },
+            { id: 6, name: "Hyper Easy Liquid Eyeliner", brand: "Maybelline", category: "Makeup", price: 899, rating: 4.3, availability: true, description: "Flex tip brush delivers a smooth, steady application for the easiest, sharpest line.", image: "https://placehold.co/400x400/000000/FFFFFF?text=Maybelline+Liner", alt: "Maybelline Hyper Easy Liquid Eyeliner" },
+            { id: 7, name: "Prep + Prime Fix+", brand: "MAC", category: "Makeup", price: 2300, rating: 4.6, availability: true, description: "A lightweight mist of water packed with vitamins and minerals to refresh makeup.", image: "https://placehold.co/400x400/ADD8E6/000000?text=MAC+Fix%2B", alt: "MAC Prep + Prime Fix+ setting spray" },
+            { id: 8, name: "Easy Bake Loose Baking & Setting Powder", brand: "Huda Beauty", category: "Makeup", price: 2950, rating: 4.5, availability: false, description: "Finely milled powder to bake and set makeup for a flawless, long-lasting, matte finish.", image: "https://placehold.co/400x400/D3D3D3/000000?text=Huda+Bake", alt: "Huda Beauty Easy Bake Setting Powder" },
+            { id: 9, name: "Positive Light Liquid Luminizer", brand: "Rare Beauty", category: "Makeup", price: 2400, rating: 4.9, availability: true, description: "Silky, liquid highlighter that creates a lasting, soft-focus, luminous glow.", image: "https://placehold.co/400x400/FFFF00/000000?text=Rare+Beauty+Luminizer", alt: "Rare Beauty Positive Light Liquid Luminizer" },
+            { id: 10, name: "Invisimatte Blotting Paper", brand: "Fenty Beauty", category: "Makeup", price: 1400, rating: 4.2, availability: true, description: "Oil-absorbing sheets that come in a portable, refillable compact for on-the-go touch-ups.", image: "https://placehold.co/400x400/808080/FFFFFF?text=Fenty+Blotting", alt: "Fenty Beauty Invisimatte Blotting Paper" },
+
+            // --- SKINCARE (10 Products) ---
+            { id: 11, name: "Niacinamide 10% + Zinc 1%", brand: "The Ordinary", category: "Skincare", price: 750, rating: 4.7, availability: true, description: "High-strength vitamin and mineral blemish formula that reduces the appearance of congestion.", image: "https://placehold.co/400x400/2F4F4F/FFFFFF?text=TO+Niacinamide", alt: "The Ordinary Niacinamide serum bottle" },
+            { id: 12, name: "Moisturizing Cream", brand: "CeraVe", category: "Skincare", price: 1200, rating: 4.8, availability: true, description: "Developed with dermatologists, this rich cream provides 24-hour hydration and helps restore the skin barrier.", image: "https://placehold.co/400x400/ADD8E6/000000?text=CeraVe+Cream", alt: "CeraVe Moisturizing Cream tub" },
+            { id: 13, name: "Lip Sleeping Mask (Berry)", brand: "LANEIGE", category: "Skincare", price: 1450, rating: 5.0, availability: true, description: "A deeply hydrating overnight lip mask that soothes and moisturizes for smoother, more supple lips.", image: "https://placehold.co/400x400/DA70D6/FFFFFF?text=LANEIGE+Lip+Mask", alt: "LANEIGE Lip Sleeping Mask in Berry" },
+            { id: 14, name: "Effaclar Duo (+)", brand: "La Roche-Posay", category: "Skincare", price: 1600, rating: 4.6, availability: true, description: "Dual-action acne treatment that reduces blemishes and prevents future breakouts.", image: "https://placehold.co/400x400/007FFF/FFFFFF?text=LRP+Effaclar", alt: "La Roche-Posay Effaclar Duo (+) tube" },
+            { id: 15, name: "Dramatically Different Moisturizing Lotion+", brand: "Clinique", category: "Skincare", price: 2800, rating: 4.4, availability: true, description: "Dermatologist-developed face moisturizer that softens, smooths, and improves skin.", image: "https://placehold.co/400x400/FFD700/000000?text=Clinique+DDML", alt: "Clinique Dramatically Different Moisturizing Lotion+" },
+            { id: 16, name: "Hyaluronic Acid 2% + B5", brand: "The Ordinary", category: "Skincare", price: 690, rating: 4.5, availability: true, description: "Hydrating serum that offers multi-depth hydration and visible plumpness.", image: "https://placehold.co/400x400/B0C4DE/000000?text=TO+HA%2BB5", alt: "The Ordinary Hyaluronic Acid serum bottle" },
+            { id: 17, name: "Foaming Cleanser", brand: "CeraVe", category: "Skincare", price: 999, rating: 4.7, availability: true, description: "Cleanses and removes oil without disrupting the protective skin barrier.", image: "https://placehold.co/400x400/6A5ACD/FFFFFF?text=CeraVe+Cleanser", alt: "CeraVe Foaming Cleanser bottle" },
+            { id: 18, name: "Water Sleeping Mask", brand: "LANEIGE", category: "Skincare", price: 1850, rating: 4.6, availability: true, description: "An overnight mask that intensely hydrates and revitalizes skin while you sleep.", image: "https://placehold.co/400x400/4682B4/FFFFFF?text=LANEIGE+Mask", alt: "LANEIGE Water Sleeping Mask jar" },
+            { id: 19, name: "Anthelios XL Ultra Light Fluid SPF 50+", brand: "La Roche-Posay", category: "Skincare", price: 2100, rating: 4.9, availability: true, description: "High protection sunscreen with an ultra-light, non-greasy finish.", image: "https://placehold.co/400x400/F0E68C/000000?text=LRP+Sunscreen", alt: "La Roche-Posay Anthelios Sunscreen" },
+            { id: 20, name: "All About Eyes Serum De-Puffing Eye Massage", brand: "Clinique", category: "Skincare", price: 3100, rating: 4.3, availability: true, description: "Cooling roll-on serum that instantly massages away eye bags and puffiness.", image: "https://placehold.co/400x400/98FB98/000000?text=Clinique+Eye", alt: "Clinique All About Eyes Serum" },
+
+            // --- HAIRCARE (10 Products) ---
+            { id: 21, name: "No. 3 Hair Perfector", brand: "Olaplex", category: "Haircare", price: 2950, rating: 4.8, availability: true, description: "A bond-building treatment that repairs, strengthens, and protects hair integrity.", image: "https://placehold.co/400x400/FF4500/FFFFFF?text=Olaplex+3", alt: "Olaplex No. 3 Hair Perfector bottle" },
+            { id: 22, name: "Treatment Original", brand: "MoroccanOil", category: "Haircare", price: 3200, rating: 4.9, availability: true, description: "The original argan oil-infused treatment that detangles, speeds up drying time, and boosts shine.", image: "https://placehold.co/400x400/D2B48C/000000?text=MoroccanOil", alt: "MoroccanOil Treatment Original bottle" },
+            { id: 23, name: "Onion Black Seed Hair Oil", brand: "WOW", category: "Haircare", price: 599, rating: 4.4, availability: true, description: "Natural formulation to strengthen hair roots, reduce hair fall, and promote growth.", image: "https://placehold.co/400x400/800000/FFFFFF?text=WOW+Oil", alt: "WOW Onion Black Seed Hair Oil" },
+            { id: 24, name: "Serioxyl Denser Hair Treatment", brand: "L'Oréal Professionnel", category: "Haircare", price: 4200, rating: 4.5, availability: true, description: "Daily treatment that helps increase hair density with Stemoxydine.", image: "https://placehold.co/400x400/87CEFA/000000?text=L'Oreal+Serioxyl", alt: "L'Oréal Professionnel Serioxyl Denser Hair Treatment" },
+            { id: 25, name: "Keratin Smooth Shampoo", brand: "TRESemmé", category: "Haircare", price: 450, rating: 4.3, availability: true, description: "Infused with keratin, this shampoo tames frizz and transforms hair into sleek, manageable strands.", image: "https://placehold.co/400x400/D3D3D3/000000?text=Tresemme+Keratin", alt: "TRESemmé Keratin Smooth Shampoo bottle" },
+            { id: 26, name: "No. 4 Bond Maintenance Shampoo", brand: "Olaplex", category: "Haircare", price: 2950, rating: 4.7, availability: true, description: "Highly concentrated shampoo to repair and protect hair from everyday stress.", image: "https://placehold.co/400x400/FF6347/FFFFFF?text=Olaplex+4", alt: "Olaplex No. 4 Bond Maintenance Shampoo" },
+            { id: 27, name: "Hydrating Shampoo", brand: "MoroccanOil", category: "Haircare", price: 1950, rating: 4.6, availability: false, description: "Sulfate-free shampoo infused with antioxidant-rich argan oil and Vitamin A and E.", image: "https://placehold.co/400x400/4682B4/FFFFFF?text=MoroccanOil+Shampoo", alt: "MoroccanOil Hydrating Shampoo" },
+            { id: 28, name: "Apple Cider Vinegar Shampoo", brand: "WOW", category: "Haircare", price: 499, rating: 4.5, availability: true, description: "Gently detoxifies hair and scalp by clearing up the buildup from styling products.", image: "https://placehold.co/400x400/006400/FFFFFF?text=WOW+ACV", alt: "WOW Apple Cider Vinegar Shampoo" },
+            { id: 29, name: "Absolut Repair Mask", brand: "L'Oréal Professionnel", category: "Haircare", price: 1800, rating: 4.4, availability: true, description: "Intensely nourishing mask for damaged and chemically treated hair.", image: "https://placehold.co/400x400/B0E0E6/000000?text=L'Oreal+Repair", alt: "L'Oréal Professionnel Absolut Repair Mask" },
+            { id: 30, name: "Climate Control Finishing Spray", brand: "TRESemmé", category: "Haircare", price: 799, rating: 4.2, availability: true, description: "Provides humidity resistance and frizz control for a sleek, all-day finish.", image: "https://placehold.co/400x400/A9A9A9/FFFFFF?text=Tresemme+Spray", alt: "TRESemmé Climate Control Finishing Spray" },
+
+            // --- FRAGRANCE (10 Products) ---
+            { id: 31, name: "J'adore Eau de Parfum", brand: "Dior", category: "Fragrance", price: 9500, rating: 4.8, availability: true, description: "A floral, luminous, and voluptuous scent with notes of Ylang-Ylang and Damascus Rose.", image: "https://placehold.co/400x400/FFD700/000000?text=Dior+J'adore", alt: "Dior J'adore Eau de Parfum bottle" },
+            { id: 32, name: "Coco Mademoiselle Eau de Parfum", brand: "Chanel", category: "Fragrance", price: 12500, rating: 4.9, availability: true, description: "An oriental fragrance with a spirited, sensual, and modern character.", image: "https://placehold.co/400x400/800000/FFFFFF?text=Chanel+Mademoiselle", alt: "Chanel Coco Mademoiselle Eau de Parfum" },
+            { id: 33, name: "Gucci Bloom Eau de Parfum", brand: "Gucci", category: "Fragrance", price: 8900, rating: 4.5, availability: true, description: "A rich white floral scent capturing the scent of a thriving garden full of flowers.", image: "https://placehold.co/400x400/FFC0CB/000000?text=Gucci+Bloom", alt: "Gucci Bloom Eau de Parfum bottle" },
+            { id: 34, name: "Black Opium Eau de Parfum", brand: "YSL Beauty", category: "Fragrance", price: 7900, rating: 4.7, availability: true, description: "The iconic coffee floral scent: adrenaline from black coffee and sensual white flowers.", image: "https://placehold.co/400x400/000000/FFFFFF?text=YSL+Black+Opium", alt: "YSL Black Opium Eau de Parfum" },
+            { id: 35, name: "Eros Pour Femme Eau de Parfum", brand: "Versace", category: "Fragrance", price: 6800, rating: 4.4, availability: true, description: "A vibrant and radiant scent, embodying strength, individuality, and seduction.", image: "https://placehold.co/400x400/DAA520/000000?text=Versace+Eros", alt: "Versace Eros Pour Femme Eau de Parfum" },
+            { id: 36, name: "Sauvage Eau de Parfum (Men's - Cross-sell)", brand: "Dior", category: "Fragrance", price: 9000, rating: 4.6, availability: true, description: "A radical fresh composition that is raw and noble all at once.", image: "https://placehold.co/400x400/4682B4/FFFFFF?text=Dior+Sauvage", alt: "Dior Sauvage Eau de Parfum bottle" },
+            { id: 37, name: "Bleu de Chanel Eau de Parfum (Men's - Cross-sell)", brand: "Chanel", category: "Fragrance", price: 11500, rating: 5.0, availability: true, description: "An aromatic-woody fragrance that defies convention with a captivating trail.", image: "https://placehold.co/400x400/2F4F4F/FFFFFF?text=Chanel+Bleu", alt: "Bleu de Chanel Eau de Parfum" },
+            { id: 38, name: "Gucci Guilty Pour Femme", brand: "Gucci", category: "Fragrance", price: 7500, rating: 4.3, availability: true, description: "A rich and noble Oriental Floral fragrance that inspires boldness.", image: "https://placehold.co/400x400/B0C4DE/000000?text=Gucci+Guilty", alt: "Gucci Guilty Pour Femme bottle" },
+            { id: 39, name: "Libre Eau de Parfum", brand: "YSL Beauty", category: "Fragrance", price: 8500, rating: 4.8, availability: false, description: "The fragrance of freedom, a bold and floral feminine scent.", image: "https://placehold.co/400x400/FF69B4/FFFFFF?text=YSL+Libre", alt: "YSL Libre Eau de Parfum" },
+            { id: 40, name: "Bright Crystal Eau de Toilette", brand: "Versace", category: "Fragrance", price: 5800, rating: 4.5, availability: true, description: "A delicate and vibrant fragrance with refreshingly floral notes.", image: "https://placehold.co/400x400/F0E68C/000000?text=Versace+Bright", alt: "Versace Bright Crystal Eau de Toilette" },
+
+            // --- ACCESSORIES (10 Products) ---
+            { id: 41, name: "Jacqueline Analog Watch", brand: "Fossil", category: "Accessories", price: 8995, rating: 4.3, availability: true, description: "Elegant rose-gold tone watch with a simple, three-hand movement and slim leather strap.", image: "https://placehold.co/400x400/D2B48C/000000?text=Fossil+Watch", alt: "Fossil Jacqueline Analog Watch" },
+            { id: 42, name: "Lexington Chronograph Watch", brand: "Michael Kors", category: "Accessories", price: 14995, rating: 4.7, availability: true, description: "Gold-tone watch with a sophisticated chronograph dial and dazzling pavé accents.", image: "https://placehold.co/400x400/FFD700/000000?text=MK+Watch", alt: "Michael Kors Lexington Watch" },
+            { id: 43, name: "Aviator Classic (RB3025)", brand: "Ray-Ban", category: "Accessories", price: 9500, rating: 4.9, availability: true, description: "Timeless classic with gold frames and G-15 polarized lenses for superior clarity.", image: "https://placehold.co/400x400/000000/FFFFFF?text=RayBan+Aviator", alt: "Ray-Ban Aviator Classic Sunglasses" },
+            { id: 44, name: "Stunning Diamond Stud Earrings (Mock)", brand: "Tanishq", category: "Accessories", price: 25000, rating: 4.8, availability: false, description: "Exquisite 18k gold and diamond cluster studs, perfect for daily elegance.", image: "https://placehold.co/400x400/F0F8FF/000000?text=Tanishq+Earrings", alt: "Tanishq Diamond Stud Earrings" },
+            { id: 45, name: "Attract Soul Crystal Set", brand: "Swarovski", category: "Accessories", price: 7999, rating: 4.5, availability: true, description: "A beautifully matched pendant and stud earring set, featuring clear, sparkling crystals.", image: "https://placehold.co/400x400/87CEEB/000000?text=Swarovski+Set", alt: "Swarovski Attract Soul Crystal Set" },
+            { id: 46, name: "Wiley Leather Wallet", brand: "Fossil", category: "Accessories", price: 3495, rating: 4.2, availability: true, description: "Compact and stylish leather bifold wallet with RFID protection.", image: "https://placehold.co/400x400/8B4513/FFFFFF?text=Fossil+Wallet", alt: "Fossil Wiley Leather Wallet" },
+            { id: 47, name: "Mercer Belted Satchel", brand: "Michael Kors", category: "Accessories", price: 18500, rating: 4.6, availability: true, description: "Structured satchel bag crafted from pebble leather with polished hardware.", image: "https://placehold.co/400x400/DDA0DD/000000?text=MK+Satchel", alt: "Michael Kors Mercer Belted Satchel" },
+            { id: 48, name: "Wayfarer Folding Classic (RB4105)", brand: "Ray-Ban", category: "Accessories", price: 11500, rating: 4.7, availability: true, description: "The iconic Wayfarer, cleverly reinterpreted in a practical folding design.", image: "https://placehold.co/400x400/5F9EA0/FFFFFF?text=RayBan+Wayfarer", alt: "Ray-Ban Folding Wayfarer Sunglasses" },
+            { id: 49, name: "Gold Chain Bracelet (Mock)", brand: "Tanishq", category: "Accessories", price: 15000, rating: 4.4, availability: true, description: "Delicate 22k gold chain bracelet, minimal yet luxurious.", image: "https://placehold.co/400x400/FFFAF0/000000?text=Tanishq+Bracelet", alt: "Tanishq Gold Chain Bracelet" },
+            { id: 50, name: "Lifelong Bow Ring", brand: "Swarovski", category: "Accessories", price: 5499, rating: 4.5, availability: true, description: "A feminine and romantic ring featuring a ribbon design in rose-gold tone plating.", image: "https://placehold.co/400x400/FF69B4/FFFFFF?text=Swarovski+Ring", alt: "Swarovski Lifelong Bow Ring" },
+        ];
+
+        const MOCK_BRANDS = ["Maybelline", "MAC", "Huda Beauty", "Rare Beauty", "Fenty Beauty", "The Ordinary", "CeraVe", "LANEIGE", "La Roche-Posay", "Clinique", "Olaplex", "MoroccanOil", "WOW", "L'Oréal Professionnel", "TRESemmé", "Dior", "Chanel", "Gucci", "YSL Beauty", "Versace", "Fossil", "Michael Kors", "Ray-Ban", "Tanishq", "Swarovski"];
+        const MOCK_CATEGORIES = ["Makeup", "Skincare", "Haircare", "Fragrance", "Accessories"];
+
+        const MOCK_TESTIMONIALS = [
+            { id: 1, quote: "My new favorite stop for natural, premium products. The LANEIGE Lip Mask is truly life-changing!", user: "Sarah J.", rating: 5 },
+            { id: 2, quote: "The selection is incredible, matching high-end quality with ethical sourcing. Fast shipping too!", user: "Mark K.", rating: 5 },
+            { id: 3, quote: "Absolutely love the earthy aesthetic and the commitment to cruelty-free products. TerraBloom is authentic.", user: "Priya R.", rating: 4 },
+        ];
+
+        let state = {
+            currentPage: 'home',
+            cart: JSON.parse(localStorage.getItem('terraBloomCart')) || [],
+            currentProduct: null,
+            filters: { category: 'All', brand: 'All', minPrice: 0, maxPrice: 30000, minRating: 0 }
+        };
+
+        // --- 2. CORE UTILITIES ---
+
+        /** Utility function to format price as Indian Rupees (INR) */
+        const formatINR = (price) => `₹${price.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+
+        /** Updates cart in state and localStorage */
+        const updateCart = (newCart) => {
+            state.cart = newCart;
+            localStorage.setItem('terraBloomCart', JSON.stringify(state.cart));
+            renderNavbar(); // Re-render navbar to update cart count
+        };
+
+        /** Adds a product to the cart or increments quantity */
+        const addToCart = (productId, quantity = 1) => {
+            const product = MOCK_PRODUCTS.find(p => p.id === productId);
+            if (!product || !product.availability) {
+                alertMessage(`Sorry, ${product.name} is currently out of stock.`, 'info');
+                return;
+            }
+
+            const existingItem = state.cart.find(item => item.id === productId);
+
+            let newCart;
+            if (existingItem) {
+                newCart = state.cart.map(item =>
+                    item.id === productId ? { ...item, quantity: item.quantity + quantity } : item
+                );
+            } else {
+                newCart = [...state.cart, { ...product, quantity }];
+            }
+
+            updateCart(newCart);
+            alertMessage(`Added ${quantity} x ${product.name} to Cart!`, 'success');
+        };
+
+        /** Updates the quantity of a product in the cart */
+        const updateCartQuantity = (productId, newQuantity) => {
+            let newCart = state.cart.filter(item => item.id !== productId);
+            if (newQuantity > 0) {
+                const item = state.cart.find(item => item.id === productId);
+                if (item) {
+                    newCart.push({ ...item, quantity: newQuantity });
+                }
+            }
+            updateCart(newCart);
+            renderCart();
+        };
+
+        /** Calculates total items in cart */
+        const getCartCount = () => state.cart.reduce((total, item) => total + item.quantity, 0);
+
+        /** Changes the current page and re-renders */
+        const navigate = (page, productId = null, categoryFilter = null) => {
+            state.currentPage = page;
+            state.currentProduct = productId ? MOCK_PRODUCTS.find(p => p.id === productId) : null;
+
+            // Set category filter if navigating from a category button (Home page)
+            if (categoryFilter) {
+                state.filters.category = categoryFilter;
+            } else if (page !== 'shop') {
+                // Reset to default on page change, but keep current filter if just rerendering shop
+                state.filters = { category: 'All', brand: 'All', minPrice: 0, maxPrice: 30000, minRating: 0 };
+            }
+
+            renderPage();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        /** Simple custom alert/message box implementation */
+        const alertMessage = (message, type = 'info') => {
+            const container = document.getElementById('navbar-container');
+            let bgColor = type === 'success' ? 'bg-green' : (type === 'info' ? 'bg-pink' : 'bg-red-500');
+
+            const alertHtml = `
+                <div id="alert-message" class="fixed top-20 right-4 p-4 rounded-lg shadow-xl text-white font-semibold transition-all duration-300 transform translate-y-0 opacity-100 ${bgColor} z-[100]">
+                    ${message}
+                </div>
+            `;
+            container.insertAdjacentHTML('afterend', alertHtml);
+
+            setTimeout(() => {
+                const el = document.getElementById('alert-message');
+                if (el) {
+                    el.classList.add('opacity-0', 'translate-y-[-20px]');
+                    el.addEventListener('transitionend', () => el.remove());
+                }
+            }, 3000);
+        };
+
+        // --- 3. COMMON RENDER COMPONENTS ---
+
+        const renderStarRating = (rating) => {
+            const fullStars = Math.floor(rating);
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    stars += `<i class="fa-solid fa-star text-pink text-sm"></i>`;
+                } else if (i === fullStars && (rating % 1 !== 0)) {
+                    stars += `<i class="fa-solid fa-star-half-stroke text-pink text-sm"></i>`;
+                } else {
+                    stars += `<i class="fa-regular fa-star text-pink/50 text-sm"></i>`;
+                }
+            }
+            return stars;
+        };
+
+        const renderProductCard = (product) => `
+            <div class="product-card fade-in" style="animation-delay: ${Math.random() * 0.2}s;">
+                <!-- Product Image -->
+                <div class="relative overflow-hidden cursor-pointer" onclick="navigate('product', ${product.id})">
+                    <img src="${product.image}" alt="${product.alt || product.name}" class="w-full h-64 object-cover transition-transform duration-500 hover:scale-[1.05]">
+                    <!-- Availability Badge -->
+                    ${!product.availability ? '<span class="absolute top-3 right-3 bg-gray-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md z-10">Out of Stock</span>' : ''}
+                    
+                    <!-- Hover Overlay -->
+                    <div class="absolute inset-0 bg-pink/50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
+                        <button class="w-12 h-12 rounded-full bg-green text-white hover:bg-white hover:text-green transition-colors duration-300 shadow-lg ${!product.availability ? 'opacity-50 pointer-events-none' : ''}"
+                            title="Quick Add to Cart" onclick="event.stopPropagation(); addToCart(${product.id});">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                        <button class="w-12 h-12 rounded-full bg-white text-green hover:bg-green hover:text-white transition-colors duration-300 shadow-lg"
+                            title="View Details" onclick="event.stopPropagation(); navigate('product', ${product.id});">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="p-4">
+                    <p class="text-sm text-gray-500 mb-1 font-semibold">${product.brand}</p>
+                    <h3 class="font-playfair text-xl font-semibold mb-1 cursor-pointer hover:text-green transition-colors" onclick="navigate('product', ${product.id})">${product.name}</h3>
+                    <div class="mb-2">${renderStarRating(product.rating)}</div>
+                    <p class="text-2xl font-bold text-green">${formatINR(product.price)}</p>
+                </div>
+            </div>
+        `;
+
+        const renderNavbar = () => {
+            const cartCount = getCartCount();
+            const navLinks = [
+                { name: 'Shop', page: 'shop' },
+                { name: 'Brands', page: 'brands' }, // Placeholder for a brands index page
+                { name: 'About', page: 'about' },
+                { name: 'Contact', page: 'contact' }
+            ];
+
+            const navHtml = `
+                <nav class="flex justify-between items-center p-4 md:p-6 lg:px-12">
+                    <!-- Logo -->
+                    <a href="#" onclick="navigate('home')" class="flex items-center space-x-2">
+                        <img src="${IMAGE_LOGO}" alt="TerraBloom Logo" class="h-6 md:h-8 object-contain">
+                    </a>
+
+                    <!-- Desktop Menu -->
+                    <div class="hidden lg:flex items-center space-x-8 font-poppins text-gray-600">
+                        ${navLinks.map(link => `
+                            <button onclick="navigate('${link.page}')"
+                                class="hover:text-pink transition-colors duration-300 font-medium ${state.currentPage === link.page ? 'text-green' : ''}">
+                                ${link.name}
+                            </button>
+                        `).join('')}
+                        <input type="text" placeholder="Search products..." class="border border-gray-300 rounded-full py-1.5 px-4 text-sm focus:ring-green focus:border-green transition-all w-64">
+                    </div>
+
+                    <!-- Icons (Cart & Mobile Menu) -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Cart Icon -->
+                        <button onclick="navigate('cart')" class="relative text-2xl text-green hover:text-pink transition-colors">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            ${cartCount > 0 ? `<span class="absolute -top-1 -right-2 bg-pink text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">${cartCount}</span>` : ''}
+                        </button>
+
+                        <!-- Mobile Hamburger -->
+                        <button id="mobile-menu-toggle" class="lg:hidden text-2xl text-green">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                    </div>
+                </nav>
+
+                <!-- Mobile Dropdown Menu -->
+                <div id="mobile-menu" class="hidden lg:hidden bg-cream shadow-inner pb-4">
+                    <div class="flex flex-col items-center space-y-3 font-poppins text-gray-600">
+                        ${navLinks.map(link => `
+                            <button onclick="navigate('${link.page}'); toggleMobileMenu();"
+                                class="hover:text-pink transition-colors duration-300 font-medium w-full text-center py-2 ${state.currentPage === link.page ? 'text-green' : ''}">
+                                ${link.name}
+                            </button>
+                        `).join('')}
+                        <input type="text" placeholder="Search products..." class="border border-gray-300 rounded-full py-1.5 px-4 text-sm focus:ring-green focus:border-green transition-all w-11/12 mb-2">
+                    </div>
+                </div>
+            `;
+            document.getElementById('navbar-container').innerHTML = navHtml;
+
+            // Attach mobile menu toggle logic
+            document.getElementById('mobile-menu-toggle').onclick = toggleMobileMenu;
+        };
+
+        const toggleMobileMenu = () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        };
+
+        const renderFooter = () => {
+            const footerHtml = `
+                <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <!-- Logo and Tagline -->
+                    <div class="md:col-span-2">
+                        <img src="${IMAGE_LOGO}" alt="TerraBloom Logo" class="h-8 mb-4 filter brightness-0 invert">
+                        <p class="text-sm opacity-80">Nature-inspired beauty, authenticity, and care. Where every ingredient tells a story.</p>
+                        <div class="flex space-x-4 mt-4 text-xl">
+                            <a href="#" class="hover:text-pink transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="hover:text-pink transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="hover:text-pink transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="font-playfair text-lg font-bold mb-4">Quick Links</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" onclick="navigate('home')" class="hover:text-pink transition-colors">Home</a></li>
+                            <li><a href="#" onclick="navigate('shop')" class="hover:text-pink transition-colors">Shop All</a></li>
+                            <li><a href="#" onclick="navigate('about')" class="hover:text-pink transition-colors">Our Story</a></li>
+                            <li><a href="#" onclick="navigate('contact')" class="hover:text-pink transition-colors">Contact Us</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Legal & Support -->
+                    <div>
+                        <h4 class="font-playfair text-lg font-bold mb-4">Support</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" onclick="alertMessage('Privacy Policy placeholder')" class="hover:text-pink transition-colors">Privacy Policy</a></li>
+                            <li><a href="#" onclick="alertMessage('Terms & Conditions placeholder')" class="hover:text-pink transition-colors">Terms & Conditions</a></li>
+                            <li><a href="#" onclick="alertMessage('Refund Policy placeholder')" class="hover:text-pink transition-colors">Refund Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-center text-sm pt-8 mt-8 border-t border-white/20">
+                    &copy; ${new Date().getFullYear()} TerraBloom. All rights reserved.
+                </div>
+            `;
+            document.getElementById('footer-container').innerHTML = footerHtml;
+        };
+
+        // --- 4. PAGE RENDERERS ---
+
+        const renderHome = () => {
+            const homeHtml = `
+                <!-- Hero Section -->
+                <section class="flex flex-col items-center justify-center h-[60vh] md:h-[80vh] bg-cream text-center fade-in">
+                    <img src="${IMAGE_LOGO}" alt="TerraBloom Logo" class="h-16 md:h-24 object-contain mb-6 filter drop-shadow-xl">
+                    <h1 class="font-playfair text-4xl md:text-6xl text-green font-extrabold mb-4">
+                        Where Nature Meets Beauty
+                    </h1>
+                    <p class="font-poppins text-lg md:text-xl text-gray-700 max-w-2xl mb-8">
+                        Discover authentic, nature-inspired beauty products from the world's most conscious brands.
+                    </p>
+                    <button class="btn-primary" onclick="navigate('shop')">Shop Now <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                </section>
+
+                <!-- Featured Categories -->
+                <section class="py-16 fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="font-playfair text-3xl md:text-4xl text-center text-green font-bold mb-12">Featured Categories</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 lg:gap-8 max-w-7xl mx-auto">
+                        ${MOCK_CATEGORIES.map(category => `
+                            <button onclick="navigate('shop', null, '${category}')" class="group block text-center p-4 rounded-xl transition-all duration-300 hover:bg-white hover:shadow-2xl border border-gray-200">
+                                <i class="text-5xl mb-3 text-pink group-hover:text-green ${category === 'Makeup' ? 'fa-solid fa-palette' : category === 'Skincare' ? 'fa-solid fa-hand-holding-heart' : category === 'Haircare' ? 'fa-solid fa-cut' : category === 'Fragrance' ? 'fa-solid fa-spray-can-sparkles' : 'fa-solid fa-gem'}"></i>
+                                <h3 class="font-playfair text-xl font-semibold text-green">${category}</h3>
+                            </button>
+                        `).join('')}
+                    </div>
+                </section>
+
+                <!-- Trending Brands Carousel (Mock) -->
+                <section class="py-16 fade-in" style="animation-delay: 0.4s;">
+                    <h2 class="font-playfair text-3xl md:text-4xl text-center text-green font-bold mb-12">Featured Brands</h2>
+                    <div class="flex justify-center space-x-6 md:space-x-12 overflow-x-auto py-4 max-w-7xl mx-auto">
+                        ${MOCK_BRANDS.filter((_, i) => i < 10).map(brand => `
+                            <div class="flex-shrink-0 w-24 md:w-32 text-center opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer" onclick="handleFilterChange('brand', '${brand}')">
+                                <div class="h-16 flex items-center justify-center border-b-2 border-green/30">
+                                    <span class="font-playfair text-xl font-bold text-gray-700">${brand.split(' ')[0]}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+
+                <!-- Testimonials / "Loved by thousands" section -->
+                <section class="py-16 bg-white rounded-2xl shadow-xl max-w-7xl mx-auto fade-in" style="animation-delay: 0.6s;">
+                    <h2 class="font-playfair text-3xl md:text-4xl text-center text-green font-bold mb-4">Loved by Thousands</h2>
+                    <p class="text-center text-gray-600 mb-12 font-poppins">Hear from our community of modern beauty lovers.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6">
+                        ${MOCK_TESTIMONIALS.map(t => `
+                            <div class="p-6 bg-cream rounded-xl shadow-lg border-t-4 border-pink">
+                                <div class="mb-3">${renderStarRating(t.rating)}</div>
+                                <p class="italic text-gray-700 mb-4">"${t.quote}"</p>
+                                <p class="font-semibold text-green">— ${t.user}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+            document.getElementById('app-content').innerHTML = homeHtml;
+        };
+
+        const renderShop = () => {
+            const { category, brand, minPrice, maxPrice, minRating } = state.filters;
+
+            const filteredProducts = MOCK_PRODUCTS.filter(p => {
+                const categoryMatch = category === 'All' || p.category === category;
+                const brandMatch = brand === 'All' || p.brand === brand;
+                const priceMatch = p.price >= minPrice && p.price <= maxPrice;
+                const ratingMatch = p.rating >= minRating;
+                return categoryMatch && brandMatch && priceMatch && ratingMatch;
+            });
+
+            const renderFilters = () => `
+                <div class="space-y-6 p-4">
+                    <h3 class="font-playfair text-2xl font-bold text-green mb-4">Filter Products</h3>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <label class="block font-semibold mb-2">Category</label>
+                        <select onchange="handleFilterChange('category', this.value)" class="w-full rounded-lg border-gray-300 bg-white p-2 text-sm focus:ring-pink focus:border-pink transition-all">
+                            <option value="All">All Categories</option>
+                            ${MOCK_CATEGORIES.map(c => `<option value="${c}" ${c === category ? 'selected' : ''}>${c}</option>`).join('')}
+                        </select>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div>
+                        <label class="block font-semibold mb-2">Brand</label>
+                        <select onchange="handleFilterChange('brand', this.value)" class="w-full rounded-lg border-gray-300 bg-white p-2 text-sm focus:ring-pink focus:border-pink transition-all">
+                            <option value="All">All Brands</option>
+                            ${MOCK_BRANDS.sort().map(b => `<option value="${b}" ${b === brand ? 'selected' : ''}>${b}</option>`).join('')}
+                        </select>
+                    </div>
+
+                    <!-- Price Filter (Slider - max 30000 INR) -->
+                    <div>
+                        <label class="block font-semibold mb-2">Max Price (${formatINR(maxPrice)})</label>
+                        <input type="range" min="0" max="30000" step="500" value="${maxPrice}" oninput="handlePriceChange(this.value)" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg" style="--thumb-color: ${COLORS.pink}; --track-color: ${COLORS.green};">
+                        <div class="flex justify-between text-xs mt-1"><span>${formatINR(0)}</span><span>${formatINR(30000)}+</span></div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div>
+                        <label class="block font-semibold mb-2">Min Rating</label>
+                        <div class="flex space-x-2">
+                            ${[1, 2, 3, 4, 5].map(r => `
+                                <button onclick="handleFilterChange('minRating', ${r})"
+                                    class="p-2 rounded-full text-xs font-bold transition-all ${r <= minRating ? 'bg-pink text-white' : 'bg-white text-gray-500 hover:bg-gray-100'}">
+                                    ${r}<i class="fa-solid fa-star ml-1"></i>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <button class="w-full btn-primary text-sm mt-4" onclick="handleClearFilters()">Clear Filters</button>
+                </div>
+            `;
+
+            const shopHtml = `
+                <h1 class="font-playfair text-4xl text-center text-green font-bold py-8 fade-in">Shop All Products</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                    <!-- Filters Sidebar -->
+                    <aside class="lg:col-span-1 bg-white rounded-xl shadow-lg sticky top-24 h-fit fade-in">
+                        ${renderFilters()}
+                    </aside>
+
+                    <!-- Product Grid -->
+                    <div class="lg:col-span-3">
+                        <p class="mb-4 text-gray-600">${filteredProducts.length} results found.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            ${filteredProducts.length > 0 ? filteredProducts.map(renderProductCard).join('') : `
+                                <div class="col-span-full text-center py-12 text-gray-500">
+                                    <i class="fa-solid fa-filter-circle-xmark text-6xl mb-4 text-pink"></i>
+                                    <p class="font-playfair text-xl">No products match your current filters.</p>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = shopHtml;
+        };
+
+        const handleFilterChange = (key, value) => {
+            if (key === 'minPrice' || key === 'maxPrice') value = parseFloat(value);
+            if (key === 'minRating') value = parseInt(value);
+            state.filters[key] = value;
+            renderShop();
+        };
+
+        const handlePriceChange = (value) => {
+            state.filters.maxPrice = parseFloat(value);
+            renderShop();
+        };
+
+        const handleClearFilters = () => {
+            state.filters = { category: 'All', brand: 'All', minPrice: 0, maxPrice: 30000, minRating: 0 };
+            renderShop();
+        };
+
+        const renderProductDetail = () => {
+            const product = state.currentProduct;
+            if (!product) {
+                return navigate('shop');
+            }
+
+            const relatedItems = MOCK_PRODUCTS
+                .filter(p => p.category === product.category && p.id !== product.id && p.availability)
+                .slice(0, 4);
+
+            const detailHtml = `
+                <div class="max-w-7xl mx-auto py-12 fade-in">
+                    <button onclick="navigate('shop')" class="text-gray-600 hover:text-pink transition-colors mb-6 text-sm">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Shop
+                    </button>
+
+                    <!-- Product Info Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white p-8 md:p-12 rounded-2xl shadow-xl">
+                        <!-- Image Gallery (Mock) -->
+                        <div>
+                            <img src="${product.image}" alt="${product.alt || product.name}" class="w-full rounded-xl shadow-lg mb-4">
+                            <!-- Small thumbnails -->
+                            <div class="flex space-x-2">
+                                <img src="${product.image}" alt="${product.name} thumbnail 1" class="w-20 h-20 object-cover rounded-md border-2 border-green/50 cursor-pointer">
+                                <img src="${product.image.replace(/\?text=.*/, '?text=Image+2')}" alt="${product.name} thumbnail 2" class="w-20 h-20 object-cover rounded-md border-2 border-transparent hover:border-pink cursor-pointer">
+                                <img src="${product.image.replace(/\?text=.*/, '?text=Image+3')}" alt="${product.name} thumbnail 3" class="w-20 h-20 object-cover rounded-md border-2 border-transparent hover:border-pink cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Details and Actions -->
+                        <div class="font-poppins">
+                            <h2 class="font-playfair text-4xl md:text-5xl text-gray-800 font-bold mb-2">${product.name}</h2>
+                            <p class="text-green text-xl font-medium mb-2">${product.brand} - <span class="text-gray-500">${product.category}</span></p>
+                            <div class="mb-4">${renderStarRating(product.rating)}</div>
+                            <p class="text-4xl font-extrabold text-green mb-6">${formatINR(product.price)}</p>
+
+                            <p class="text-gray-700 mb-8 leading-relaxed">${product.description}</p>
+                            
+                            <!-- Availability Status -->
+                            <div class="mb-6">
+                                ${product.availability ?
+                    '<span class="text-sm font-semibold text-white bg-green px-3 py-1 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i> In Stock</span>' :
+                    '<span class="text-sm font-semibold text-white bg-red-500 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-xmark mr-1"></i> Out of Stock</span>'
+                }
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex items-center space-x-4 mb-8">
+                                <label for="quantity" class="font-semibold">Quantity:</label>
+                                <input type="number" id="product-quantity" value="1" min="1" max="10" class="w-20 rounded-lg border-gray-300 focus:ring-pink focus:border-pink text-center">
+                            </div>
+
+                            <div class="flex space-x-4">
+                                <button class="btn-primary flex-1 ${!product.availability ? 'opacity-50 pointer-events-none' : ''}" onclick="handleDetailPageAddToCart(${product.id})">
+                                    <i class="fa-solid fa-cart-shopping mr-2"></i> Add to Cart
+                                </button>
+                                <button class="w-14 h-14 rounded-full border border-gray-300 text-pink hover:bg-pink hover:text-white transition-colors duration-300" title="Add to Wishlist">
+                                    <i class="fa-solid fa-heart"></i>
+                                </button>
+                            </div>
+
+                            <!-- Trust Badges -->
+                            <div class="mt-8 pt-6 border-t border-gray-200 space-y-3">
+                                <div class="flex items-center text-sm text-gray-600"><i class="fa-solid fa-leaf text-green mr-3"></i> Eco-Conscious Packaging</div>
+                                <div class="flex items-center text-sm text-gray-600"><i class="fa-solid fa-paw text-pink mr-3"></i> Cruelty-Free & Vegan Options</div>
+                                <div class="flex items-center text-sm text-gray-600"><i class="fa-solid fa-truck text-green mr-3"></i> Free Shipping over ₹4,000</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related Items Section -->
+                    ${relatedItems.length > 0 ? `
+                        <div class="mt-16">
+                            <h3 class="font-playfair text-3xl text-green font-bold mb-8">You Might Also Love</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                ${relatedItems.map(renderProductCard).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = detailHtml;
+        };
+
+        const handleDetailPageAddToCart = (productId) => {
+            const quantity = parseInt(document.getElementById('product-quantity').value, 10);
+            addToCart(productId, quantity);
+        };
+
+        const renderCart = () => {
+            const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const FREE_SHIPPING_THRESHOLD = 4000; // INR
+            const SHIPPING_COST = 300; // INR
+            const shipping = subtotal > 0 && subtotal < FREE_SHIPPING_THRESHOLD ? SHIPPING_COST : 0.00;
+            const total = subtotal + shipping;
+
+            const cartHtml = `
+                <div class="max-w-4xl mx-auto py-12 fade-in">
+                    <h1 class="font-playfair text-4xl text-center text-green font-bold mb-10">Your Shopping Bag</h1>
+
+                    ${state.cart.length === 0 ? `
+                        <div class="text-center py-20 bg-white rounded-xl shadow-lg">
+                            <i class="fa-solid fa-bag-shopping text-7xl text-pink mb-4 opacity-50"></i>
+                            <p class="font-playfair text-2xl text-gray-700 mb-4">Your bag is feeling light!</p>
+                            <button class="btn-primary" onclick="navigate('shop')">Start Shopping</button>
+                        </div>
+                    ` : `
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Cart Items List (2/3 width) -->
+                            <div class="lg:col-span-2 space-y-6">
+                                ${state.cart.map(item => `
+                                    <div class="flex items-center bg-white p-4 rounded-xl shadow-lg transition-shadow duration-300 hover:shadow-xl">
+                                        <img src="${item.image}" alt="${item.alt || item.name}" class="w-20 h-20 object-cover rounded-lg mr-4">
+                                        <div class="flex-1">
+                                            <h3 class="font-playfair text-lg font-semibold text-gray-800">${item.name}</h3>
+                                            <p class="text-gray-500 text-sm">${item.brand}</p>
+                                            <p class="text-green font-bold mt-1">${formatINR(item.price)}</p>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-4">
+                                            <!-- Quantity Selector -->
+                                            <div class="flex items-center border border-gray-300 rounded-lg">
+                                                <button onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})" class="p-2 text-green hover:bg-gray-100 rounded-l-lg"><i class="fa-solid fa-minus"></i></button>
+                                                <span class="px-3 font-semibold text-gray-800">${item.quantity}</span>
+                                                <button onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})" class="p-2 text-green hover:bg-gray-100 rounded-r-lg"><i class="fa-solid fa-plus"></i></button>
+                                            </div>
+                                            <!-- Remove Button -->
+                                            <button onclick="updateCartQuantity(${item.id}, 0)" class="text-pink hover:text-red-600 transition-colors p-2 rounded-full">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <!-- Order Summary (1/3 width) -->
+                            <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-xl h-fit border border-green/30">
+                                <h3 class="font-playfair text-2xl font-bold text-green mb-6 border-b pb-3">Order Summary</h3>
+                                <div class="space-y-3 font-poppins text-gray-700">
+                                    <div class="flex justify-between">
+                                        <span>Subtotal (${getCartCount()} items)</span>
+                                        <span class="font-semibold">${formatINR(subtotal)}</span>
+                                    </div>
+                                    <div class="flex justify-between border-b pb-3">
+                                        <span>Shipping</span>
+                                        <span class="font-semibold text-pink">${shipping === 0 ? 'FREE (Over ' + formatINR(FREE_SHIPPING_THRESHOLD) + ')' : formatINR(shipping)}</span>
+                                    </div>
+                                    <div class="flex justify-between pt-3 text-xl font-bold text-gray-800">
+                                        <span>Estimated Total</span>
+                                        <span class="text-green">${formatINR(total)}</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn-primary w-full mt-8" onclick="navigate('checkout')">
+                                    Proceed to Checkout <i class="fa-solid fa-credit-card ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = cartHtml;
+        };
+
+        const renderCheckout = () => {
+            const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const FREE_SHIPPING_THRESHOLD = 4000;
+            const SHIPPING_COST = 300;
+            const shipping = subtotal > 0 && subtotal < FREE_SHIPPING_THRESHOLD ? SHIPPING_COST : 0.00;
+            const total = subtotal + shipping;
+
+            if (state.cart.length === 0) {
+                alertMessage('Your cart is empty. Redirecting to shop.', 'info');
+                return navigate('shop');
+            }
+
+            const checkoutHtml = `
+                <div class="max-w-5xl mx-auto py-12 fade-in">
+                    <h1 class="font-playfair text-4xl text-center text-green font-bold mb-10">Secure Checkout</h1>
+
+                    <!-- Checkout Steps (Mock Progress Bar) -->
+                    <div class="flex justify-between items-center mb-10 text-center font-poppins max-w-lg mx-auto">
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-pink text-white flex items-center justify-center font-bold mb-1">1</div>
+                            <span class="text-sm font-semibold text-green">Shipping</span>
+                        </div>
+                        <div class="h-0.5 w-1/3 bg-green/50"></div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold mb-1">2</div>
+                            <span class="text-sm text-gray-600">Review</span>
+                        </div>
+                        <div class="h-0.5 w-1/3 bg-gray-300"></div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold mb-1">3</div>
+                            <span class="text-sm text-gray-600">Payment</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Billing & Shipping Form (2/3 width) -->
+                        <div class="lg:col-span-2 bg-white p-8 rounded-xl shadow-xl">
+                            <h2 class="font-playfair text-3xl font-bold text-gray-800 mb-6">Shipping Information</h2>
+                            <form id="shipping-form" onsubmit="event.preventDefault(); handleCheckoutSubmit();" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <input type="text" placeholder="First Name" required class="form-input">
+                                    <input type="text" placeholder="Last Name" required class="form-input">
+                                    <input type="email" placeholder="Email Address" required class="form-input col-span-full">
+                                </div>
+                                <input type="text" placeholder="Street Address" required class="form-input">
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <input type="text" placeholder="City" required class="form-input">
+                                    <input type="text" placeholder="State/Province" required class="form-input">
+                                    <input type="text" placeholder="Zip/Postal Code" required class="form-input">
+                                </div>
+                                
+                                <h2 class="font-playfair text-3xl font-bold text-gray-800 pt-8 mb-6 border-t mt-8">Payment Details (Mock)</h2>
+                                <div class="space-y-4">
+                                    <div class="flex items-center p-3 border border-pink/50 rounded-lg bg-pink/5">
+                                        <i class="fa-solid fa-credit-card text-2xl text-pink mr-3"></i>
+                                        <span class="font-semibold text-gray-700">Mock Payment Gateway Active. No real payment will be processed.</span>
+                                    </div>
+                                    <input type="text" placeholder="Card Number" class="form-input" required pattern="[0-9]{16}" title="16 digits required">
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <input type="text" placeholder="MM/YY" class="form-input" required pattern="(0[1-9]|1[0-2])\/\d{2}" title="Format MM/YY">
+                                        <input type="text" placeholder="CVC" class="form-input" required pattern="[0-9]{3,4}" title="3 or 4 digits required">
+                                        <input type="text" placeholder="Name on Card" class="form-input" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-primary w-full py-4 mt-8 text-lg">
+                                    Place Order - ${formatINR(total)}
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Order Summary (1/3 width) -->
+                        <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-xl h-fit border border-green/30">
+                            <h3 class="font-playfair text-2xl font-bold text-green mb-6 border-b pb-3">Order Summary</h3>
+                            <div class="space-y-3 font-poppins text-gray-700">
+                                ${state.cart.map(item => `
+                                    <div class="flex justify-between text-sm">
+                                        <span class="truncate">${item.quantity} x ${item.name}</span>
+                                        <span class="font-semibold">${formatINR(item.price * item.quantity)}</span>
+                                    </div>
+                                `).join('')}
+                                <div class="border-t border-gray-200 pt-3 mt-3"></div>
+                                <div class="flex justify-between">
+                                    <span>Subtotal</span>
+                                    <span class="font-semibold">${formatINR(subtotal)}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Shipping</span>
+                                    <span class="font-semibold text-pink">${shipping === 0 ? 'FREE' : formatINR(shipping)}</span>
+                                </div>
+                                <div class="flex justify-between pt-4 text-xl font-bold text-gray-800 border-t border-gray-200 mt-4">
+                                    <span>Order Total</span>
+                                    <span class="text-green">${formatINR(total)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    /* Custom input styling for checkout form */
+                    .form-input {
+                        @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-pink focus:border-pink transition-all font-poppins;
+                    }
+                </style>
+            `;
+            document.getElementById('app-content').innerHTML = checkoutHtml;
+        };
+
+        const handleCheckoutSubmit = () => {
+            // Mock submission and clearing the cart
+            alertMessage('Order Placed Successfully! Your order will be confirmed via email.', 'success');
+            updateCart([]); // Clear cart
+            // Mock delay before redirecting
+            setTimeout(() => {
+                navigate('home');
+            }, 3000);
+        };
+
+        const renderAbout = () => {
+            const aboutHtml = `
+                <div class="max-w-4xl mx-auto py-12 fade-in">
+                    <h1 class="font-playfair text-4xl md:text-5xl text-center text-green font-bold mb-12">Our Story: Where Authenticity Blooms</h1>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-xl mb-12 border-t-8 border-pink">
+                        <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                            TerraBloom was founded on a simple belief: that true beauty is cultivated from nature's purest elements. We are more than just a marketplace; we are a curation of global beauty brands committed to ethical sourcing, innovation, and genuine results. Our name is derived from 'Terra' (Earth) and 'Bloom' (Growth), symbolizing our dedication to natural elegance and positive transformation.
+                        </p>
+                        <p class="text-gray-700 text-lg leading-relaxed">
+                            We bridge the gap between premium self-care and earth-conscious living, providing a space where modern beauty lovers can discover products that feel luxurious, perform flawlessly, and respect the planet. We proudly feature brands like **MAC, Dior, The Ordinary, and Olaplex**, carefully vetting their commitment to quality and sustainability.
+                        </p>
+                    </div>
+
+                    <!-- Values Section -->
+                    <h2 class="font-playfair text-3xl text-center text-green font-bold mb-8">Our Core Values</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="p-6">
+                            <i class="fa-solid fa-seedling text-5xl text-green mb-4"></i>
+                            <h3 class="font-playfair text-2xl font-semibold mb-3">Eco-Conscious</h3>
+                            <p class="text-gray-600">Prioritizing sustainable ingredients, minimal waste, and recyclable packaging across all our partner brands.</p>
+                        </div>
+                        <div class="p-6">
+                            <i class="fa-solid fa-user-group text-5xl text-pink mb-4"></i>
+                            <h3 class="font-playfair text-2xl font-semibold mb-3">Inclusive Beauty</h3>
+                            <p class="text-gray-600">A commitment to offering diverse products that cater to all skin tones, hair types, and unique beauty needs.</p>
+                        </div>
+                        <div class="p-6">
+                            <i class="fa-solid fa-paw text-5xl text-green mb-4"></i>
+                            <h3 class="font-playfair text-2xl font-semibold mb-3">Cruelty-Free</h3>
+                            <p class="text-gray-600">Every product we sell is 100% cruelty-free. We believe beauty should never come at the expense of animals.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = aboutHtml;
+        };
+
+        const renderContact = () => {
+            const contactHtml = `
+                <div class="max-w-3xl mx-auto py-12 fade-in">
+                    <h1 class="font-playfair text-4xl md:text-5xl text-center text-green font-bold mb-12">Connect With Nature</h1>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded-2xl shadow-xl">
+                        <!-- Contact Form -->
+                        <div>
+                            <h2 class="font-playfair text-3xl font-bold text-gray-800 mb-6">Send Us a Message</h2>
+                            <form onsubmit="event.preventDefault(); alertMessage('Message Sent! We will get back to you within 48 hours.', 'success'); this.reset();" class="space-y-4">
+                                <input type="text" placeholder="Your Name" required class="form-input p-3">
+                                <input type="email" placeholder="Your Email" required class="form-input p-3">
+                                <textarea rows="4" placeholder="Your Message" required class="form-input p-3 resize-none"></textarea>
+                                <button type="submit" class="btn-primary w-full">Submit Inquiry</button>
+                            </form>
+                        </div>
+
+                        <!-- Info & Subscription -->
+                        <div class="pt-8 lg:pt-0">
+                            <h2 class="font-playfair text-3xl font-bold text-gray-800 mb-6">Contact Information</h2>
+                            <div class="space-y-4 text-gray-700">
+                                <p><i class="fa-solid fa-envelope text-green mr-3"></i> <a href="mailto:support@terrabloom.com" class="hover:text-pink transition-colors">support@terrabloom.com</a></p>
+                                <p><i class="fa-solid fa-phone text-green mr-3"></i> <a href="tel:+91-800-400-0000" class="hover:text-pink transition-colors">+91 800 400 0000 (Mon-Fri)</a></p>
+                                <p><i class="fa-solid fa-location-dot text-green mr-3"></i> Global Headquarters: Earthly Beauty Ave, New Delhi, India</p>
+                            </div>
+
+                            <div class="mt-8 border-t pt-6">
+                                <h3 class="font-playfair text-2xl font-bold text-pink mb-4">Join The Bloom!</h3>
+                                <p class="text-sm text-gray-600 mb-3">Subscribe for exclusive offers and sustainable beauty tips.</p>
+                                <form onsubmit="event.preventDefault(); alertMessage('Thank you for subscribing!', 'success'); this.reset();" class="flex">
+                                    <input type="email" placeholder="Enter your email" required class="form-input p-3 rounded-r-none flex-1">
+                                    <button type="submit" class="bg-pink text-white font-semibold px-4 rounded-r-lg hover:bg-green transition-colors duration-300">Subscribe</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    /* Custom input styling for contact form */
+                    .form-input {
+                        @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-pink focus:border-pink transition-all font-poppins;
+                    }
+                </style>
+            `;
+            document.getElementById('app-content').innerHTML = contactHtml;
+        };
+
+        /** Main rendering function */
+        const renderPage = () => {
+            renderNavbar();
+            switch (state.currentPage) {
+                case 'shop':
+                    renderShop();
+                    break;
+                case 'product':
+                    renderProductDetail();
+                    break;
+                case 'cart':
+                    renderCart();
+                    break;
+                case 'checkout':
+                    renderCheckout();
+                    break;
+                case 'about':
+                    renderAbout();
+                    break;
+                case 'contact':
+                    renderContact();
+                    break;
+                case 'home':
+                default:
+                    renderHome();
+                    break;
+            }
+        };
+
+        // --- 5. INITIALIZATION ---
+
+        window.onload = () => {
+            renderFooter();
+            renderPage();
+        };
+
+    </script>
+</body>
+
+</html>
